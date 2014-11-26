@@ -19,7 +19,7 @@ class User extends App_Controller {
             // Refresh the session
             $this->ion_auth->login_remembered_user();
             // Redirect to main page
-            redirect('dictionary');
+            redirect('donation');
         } else {
             // Do nothing
         }
@@ -41,7 +41,7 @@ class User extends App_Controller {
 
             if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
                 $this->session->set_flashdata('app_success', $this->ion_auth->messages());
-                redirect('dictionary');
+                redirect('donation');
             } else {
                 $this->session->set_flashdata('app_error', $this->ion_auth->errors());
                 redirect('login');
@@ -106,15 +106,130 @@ class User extends App_Controller {
     }
 
     public function account() {
-        $this->body_class[] = 'my_account';
+        
+        // Check if user login
+        if ($this->ion_auth->logged_in()) {
+            // Refresh the session
+            $this->ion_auth->login_remembered_user();
+            $this->body_class[] = 'my_account';
 
         $this->page_title = 'My Account';
 
         $this->current_section = 'my_account';
 
         $user = $this->ion_auth->user()->row_array();
+//        var_dump($user);
 
         $this->render_page('user/account', array('user' => $user));
+        } else {
+            redirect('login');
+        }
+        
+        
     }
 
+    public function signup() {
+        $this->load->helper(array('form', 'url'));
+
+        $this->load->library('form_validation');
+        
+        // Check if user login
+        if ($this->ion_auth->logged_in()) {
+            // Refresh the session
+            $this->ion_auth->login_remembered_user();
+            // Redirect to main page
+            redirect('donation');
+        } else {
+            // Do nothing
+        }
+        $this->body_class[] = 'signup';
+
+        $this->page_title = 'Sign up';
+
+        $this->current_section = 'signup';
+
+        $config = array(
+            array(
+                'field' => 'identity',
+                'label' => 'Username',
+                'rules' => 'trim|required|min_length[6]|is_unique[users.username]|xss_clean'
+            ),
+            array(
+                'field' => 'email',
+                'label' => 'Email',
+                'rules' => 'trim|required|valid_email|is_unique[users.email]'
+            ),
+            array(
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'trim|required|min_length[6]|max_length[32]'
+            ),
+            array(
+                'field' => 'passconf',
+                'label' => 'Confirm Password',
+                'rules' => 'trim|required|matches[password]'
+            ),
+        );
+
+        $this->form_validation->set_rules($config);
+
+        if ($this->form_validation->run() == FALSE) {
+//            $this->load->view('user/signup');
+            // the user is not logging in so display the login page
+            // set the flash data error message if there is one
+            $data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('app_error');
+
+            $data['identity'] = array('name' => 'identity',
+                'id' => 'identity',
+                'type' => 'text',
+                'value' => $this->form_validation->set_value('identity'),
+                'class' => 'form-control',
+                'placeholder' => 'Username',
+                'required' =>''
+            );
+            $data['email'] = array('name' => 'email',
+                'id' => 'email',
+                'type' => 'email',
+                'value' => $this->form_validation->set_value('email'),
+                'class' => 'form-control',
+                'placeholder' => 'Email Address',
+                'required' =>''
+            );
+            $data['password'] = array('name' => 'password',
+                'id' => 'password',
+                'type' => 'password',
+                'class' => 'form-control',
+                'placeholder' => 'Password',
+                'required' =>''
+            );
+            $data['passconf'] = array('name' => 'passconf',
+                'id' => 'passconf',
+                'type' => 'password',
+                'class' => 'form-control',
+                'placeholder' => 'Confirm your password',
+                'required' =>''
+            );
+            
+            $this->assets_css[] = 'login.css';
+            $this->render_plain_page('user/signup', $data);
+        } else {
+            // Add user
+            $username = $this->input->post('identity');
+            $email = $this->input->post('email');
+            $password = $this->input->post('password');
+            $additional_data = array();
+            // Register using Ion-Auth library
+            if ($this->ion_auth->register($username, $password, $email, $additional_data)&& 
+                    $this->ion_auth->login($username, $password, false)){
+                // Sign up and log in successful
+                $this->session->set_flashdata('app_success', $this->ion_auth->messages());
+                // Redirect to proper page.
+                redirect('donation');
+            } else {
+                // Some error happened
+                $this->session->set_flashdata('app_error', $this->ion_auth->errors());
+                redirect('login');
+            }
+        }
+    }
 }

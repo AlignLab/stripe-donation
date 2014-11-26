@@ -17,6 +17,8 @@
             <?php echo $template['partials']['header'] ?>
 
             <div id="page-wrapper">
+                
+                
 
                 <?php echo $template['body'] ?>
 

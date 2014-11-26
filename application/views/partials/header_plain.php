@@ -1,2 +1,2 @@
-<!--Just use this <p> to avoid showing the scroolbar in Chrome. :)-->
+<!--Just use this <p> to avoid showing the scrollbar in Chrome. :)-->
 <p>   .</p>

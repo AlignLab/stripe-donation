@@ -10,11 +10,10 @@ Happy code!!!
 
 html, body{
     height: 100%;
-    background: #657E8A;
 }
 
 #page-wrapper {
-    background-color: #657E8A;
+    background-color: #93D0A6;
 }
 
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
@@ -22,12 +21,6 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 }
 input:-moz-placeholder, textarea:-moz-placeholder {
   color: #636363;
-}
-
-.btn-success{
-    color:#fff;
-    background-color:#1E6C79;
-    border-color:#1E6C79
 }
 
 .btn-success:hover,
@@ -41,19 +34,24 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 }
 
 .cb_rememberme{
-    color: white;
+    /*color: black;*/
 }
 
-// For big screen like PC or laptop, tablet.
+/*For big screen like PC or laptop, tablet.*/
 @media (min-width: 768px) {
     #login-logo{
-        margin-top: 100px;
+        margin-top: 170px;
     }
 }
 
-// For small screen like mobile phone.
+/*For small screen like mobile phone.*/
 @media (max-width: 767px){
     #login-logo{
         margin-top: 10px;
     }
+}
+
+/*Image handle*/
+.img-center{
+    margin: auto;
 }

@@ -42,6 +42,7 @@ $route['default_controller'] = "user";
 $route['404_override'] = '';
 
 $route['login'] = 'user/login';
+$route['signup'] = 'user/signup';
 $route['logout'] = 'user/logout';
 $route['forgot-password'] = 'user/forgot_password';
 $route['my-account'] = 'user/account';

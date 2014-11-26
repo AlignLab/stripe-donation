@@ -1,9 +1,9 @@
 <?php echo form_open('login', array('class' => 'form-signin')) ?>
 
 
-<img src="<?php echo base_url(); ?>assets/img/login_logo.png" class="img-responsive img-center" id="login-logo" alt="Greater Traveler" width="200">
+<img src="<?php echo base_url(); ?>assets/img/signin-logo.png" class="img-responsive img-center" id="login-logo" alt="Donation" width="200">
 
-<div class="<?php echo (form_error('identity')) ? 'error' : '' ?> form-group">
+<div class="<?php echo (form_error('identity')) ? 'has-error' : '' ?> form-group">
 
     <label for="identity" class="control-label"></label>
     <div class="">
@@ -12,7 +12,7 @@
     </div>
 
 </div>
-<div class="<?php echo (form_error('password')) ? 'error' : '' ?> form-group">
+<div class="<?php echo (form_error('password')) ? 'has-error' : '' ?> form-group">
 
     <div class="">
         <?php echo form_input($password) ?>
@@ -22,13 +22,19 @@
 </div>
 
 <div class="">
-    <button id="btn_submit" class="btn tn-larbge btn-success btn-block" type="submit">Sign me in</button>
+    <button id="btn_submit" class="btn tn-larbge btn-danger btn-block" type="submit">Sign me in</button>
 </div>
 <hr>
-<div class="checkbox">
+
+<div class="checkbox row">
+    <div class="col-xs-8">
     <label class="cb_rememberme">
         <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"') ?> Keep me sign in
     </label>
+    </div>
+    <div class="col-xs-4">
+        <a href="<?php echo base_url(); ?>signup">Sign up</a>
+    </div>
 </div>
 
 <?php echo form_close() ?>
