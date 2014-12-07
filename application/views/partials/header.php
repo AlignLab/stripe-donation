@@ -1,2 +1,4 @@
-<!--Just use this <p> to avoid showing the scroll-bar in Chrome. :)-->
-<p style="color: #93D0A6"> . </p>
+<!--Just use this <div class="row"> to avoid showing the scrollbar in Chrome. :)-->
+<div class="row">
+    
+</div>

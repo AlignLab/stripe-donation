@@ -46,12 +46,15 @@ table tbody div.row{
 
 /*Text style*/
 /* Small text size */
-.small-text {
+.text-small {
     font-size: 11px;
     color: #999;
 }
 .text-white{
     color: white;
+}
+.text-center{
+    text-align: center;
 }
 
 /*
@@ -85,7 +88,7 @@ table tbody div.row{
 
 
 .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
-    background-color: #E7E8E9;
+    background-color: #F3F3F4;
 }
 
 @media (max-width: 767px) {
@@ -112,7 +115,8 @@ table tbody div.row{
     border-radius: 5px;
     background-color: white;
     margin: 10px;
-    margin-top: 50px;
+    margin-top: 70px;
+    padding-bottom: 20px;
 }
 #page-wrapper {
     background-color: #93D0A6;
@@ -121,6 +125,11 @@ table tbody div.row{
 }
 .row-fluid {
     width: 100%;
+}
+
+/*Footer.*/
+footer{
+    margin-bottom: 10px;
 }
 
 /*Break line*/
@@ -154,3 +163,45 @@ hr {
     padding-right: 40px;
 }
 
+/*Your donation table*/
+#donation-table{
+    width: 650px;
+    margin: auto;
+}
+.cell-action{
+    width: 70px;
+}
+.table>tbody>tr>td{
+    border-top: none;
+}
+.table>thead>tr>th {
+    border-bottom: none;
+}
+
+/*Create a donation form*/
+.form-create{
+    margin: auto;
+    width: 400px;
+}
+.amount-record{
+    padding-top: 5px;
+}
+.removeNew{
+    padding-top: 9px;
+    color: red;
+}
+
+/*Your orders table*/
+#order-table{
+    width: 650px;
+    margin: auto;
+}
+#order-table>thead>tr{
+    background-color: #808E8E;
+}
+
+/*Your stats table*/
+#stat-table{
+    width: 400px;
+    margin: auto;
+}

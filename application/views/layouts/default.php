@@ -10,6 +10,7 @@
     <body class="<?php echo $body_class ?>">
 
         <div class='notifications top-right'></div>
+        
         <div id="wrapper">
 
             <?php echo $template['partials']['flash_messages'] ?>
@@ -18,8 +19,6 @@
 
             <div id="page-wrapper">
                 
-                
-
                 <?php echo $template['body'] ?>
 
                 <?php echo $template['partials']['footer'] ?>

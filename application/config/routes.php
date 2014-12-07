@@ -47,11 +47,8 @@ $route['logout'] = 'user/logout';
 $route['forgot-password'] = 'user/forgot_password';
 $route['my-account'] = 'user/account';
 
-/* Routing for Greater Traveler website */
-$route['member'] = 'chamber/member';
-$route['category'] = 'chamber/category';
-$route['calendar'] = 'chamber/calendar';
-$route['area_info'] = 'chamber/area_info';
+/* Routing for Stripe Donation website */
+$route['pay/(:num)'] = 'pay/index/$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
