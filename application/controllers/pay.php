@@ -11,9 +11,9 @@ class Pay extends App_Controller {
         $this->load->model('order_model');
         $this->config->load('stripe');
     }
-    
+
     public function index($checkoutUid) {
-        
+
         // Check for a form submission:
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -41,18 +41,18 @@ class Pay extends App_Controller {
             $email = $this->input->post('email');
             $frequencyUser = $this->input->post('frequency');
             $amountUser = $this->input->post('amount');
-            
+
             // Get donation info from data base:
             $donation = $this->donation_model->getDonation(null, $checkoutUid);
-            
-            if ($donation && $donation['public_state']==1){
+
+            if ($donation && $donation['public_state'] == 1) {
                 // Decide the amount: User input or from database:
-                if ($donation['amount_decide'] == 0){
+                if ($donation['amount_decide'] == 0) {
                     // User decide.
                     $amount = $amountUser;
                 } else {
                     $amountOption = count($donation['amounts']);
-                    if ($amountOption > 1){
+                    if ($amountOption > 1) {
                         // There will many option. User will select the amount.
                         $amount = $amountUser;
                     } else {
@@ -61,15 +61,23 @@ class Pay extends App_Controller {
                     }
                 }
                 // TODO : Do the frequency stuff: make it recurring....
-                if ($donation['frequency'] == 0){
+                if ($donation['frequency'] == 0) {
                     $frequency = $frequencyUser;
                 } else {
                     $frequency = $donation['frequency'];
                 }
+
+                // Get the Stripe connect
+                $userId = $donation['user_id'];
+                $stripeConnect = $this->connect_model->getConnect($userId);
+                if (!$stripeConnect) {
+                    // User not connect to stripe yet
+                    $errors['donation'] = 'User have not connect to Tripe.';
+                }
             } else {
                 $errors['donation'] = 'Could not find the Donation';
             }
-            
+
             // Validate other form data!
             // If no errors, process the order:
             if (empty($errors)) {
@@ -82,21 +90,23 @@ class Pay extends App_Controller {
 
                     // set your secret key: remember to change this to your live secret key in production
                     // see your keys here https://manage.stripe.com/account
-                    Stripe::setApiKey($this->config->item('stripe_key_test_secret'));
-                    
+                    // Here we handle everything on behalf of user.
+                    $userSecretKey = $stripeConnect['access_token'];
+                    Stripe::setApiKey($userSecretKey);
+
                     // Charge the order:
                     $charge = Stripe_Charge::create(array(
-                                "amount" => $amount*100, // amount in cents, again
+                                "amount" => $amount * 100, // amount in cents, again
                                 "currency" => "usd",
                                 "card" => $token,
                                 "description" => $checkoutUid
-                            )
+                                    )
                     );
                     // Check that it was paid:
                     if ($charge->paid == true) {
                         // Payment successful.
                         // Save to Order table
-                        $userId = $donation['user_id'];
+
                         $orderData = array(
                             'user_id' => $userId,
                             'client_name' => $name,
@@ -105,8 +115,8 @@ class Pay extends App_Controller {
                             'amount' => $amount
                         );
                         $orderId = $this->order_model->createOrder($orderData);
-                        
-                        if ($orderId){
+
+                        if ($orderId) {
                             // Save order successful
                             $data['confirmation'] = $donation['confirmation_message'];
                             $this->render_embed_page('pay/thankyou', $data);
@@ -134,11 +144,11 @@ class Pay extends App_Controller {
                     // Something else that's not the customer's fault.
                     $errors['stripe'] = "It's our fault, not yours.";
                 }
-                if (! empty($errors)){
+                if (!empty($errors)) {
                     // Show error screen
-                foreach ($errors as $key => $error){
-                    echo "<p><b>".$key.":</b> ".$error."</p>";
-                }
+                    foreach ($errors as $key => $error) {
+                        echo "<p><b>" . $key . ":</b> " . $error . "</p>";
+                    }
                 }
             } else {
                 // A user form submission error occurred, handled below.
@@ -146,8 +156,8 @@ class Pay extends App_Controller {
 //                    $this->session->set_flashdata('app_error', $error);
 //                }
                 // Show error screen
-                foreach ($errors as $key => $error){
-                    echo "<p><b>".$key.":</b> ".$error."</p>";
+                foreach ($errors as $key => $error) {
+                    echo "<p><b>" . $key . ":</b> " . $error . "</p>";
                 }
             }
         } else {
@@ -164,8 +174,18 @@ class Pay extends App_Controller {
 
             $data = array();
             $donation = $this->donation_model->getDonation(null, $checkoutUid);
-            if ($donation){
-                $data['publish_key'] = $this->config->item('stripe_key_test_public');
+            if ($donation && $donation['public_state'] == 1) {
+                // TODO
+                $userId = $donation['user_id'];
+                $stripeConnect = $this->connect_model->getConnect($userId);
+                if (!$stripeConnect) {
+                    // User not connect to stripe yet
+                    echo 'User have not connect to Tripe.';
+                    exit(0);
+                }
+                $userPublicKey = $stripeConnect['stripe_publishable_key'];
+
+                $data['publish_key'] = $userPublicKey;
                 $data['donation'] = $donation;
 
                 $this->render_embed_page('pay/index', $data);
@@ -175,4 +195,5 @@ class Pay extends App_Controller {
             }
         }
     }
+
 }

@@ -219,6 +219,14 @@
                         <textarea class="form-control" id="confirmation" name="confirmation"></textarea>
                     </div>
                 </div>
+                
+                <!-- Embedded code -->
+                <div class="form-group">
+                    <label class="control-label" for="embedded">Embedded Code for your website</label>
+                    <div class="">                     
+                        <input id="embed" type="text" class="form-control input-md" readonly="readonly">
+                    </div>
+                </div>
 
                 <!-- Button (Double) -->
                 <div class="form-group">

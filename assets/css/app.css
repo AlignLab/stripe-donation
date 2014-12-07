@@ -190,6 +190,9 @@ hr {
     padding-top: 9px;
     color: red;
 }
+.form-control[readonly]{
+    cursor: text;
+}
 
 /*Your orders table*/
 #order-table{

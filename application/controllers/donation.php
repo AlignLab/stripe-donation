@@ -42,40 +42,12 @@ class Donation extends App_Controller {
             $data['announce_action_text'] = "Create a Donation";
         } else {
             $data['announce_message'] = "Welcome to Donations, get started by: ";
-            $data['announce_action'] = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id=".$clientId."&state=" . $userId;
+            $data['announce_action'] = "https://connect.stripe.com/oauth/authorize?response_type=code&scope=read_write&client_id=".$clientId."&state=" . $userId;
             $data['announce_action_text'] = "Activate your Stripe account";
         }
 
         $data['user_id'] = $userId;
         $this->render_page('donation/index', $data);
-    }
-
-    // Not run yet. Still the verification stuff. @@
-    public function connect1() {
-
-        // Load the library and config
-        require_once(APPPATH . 'libraries/Stripe.php');
-        require_once(APPPATH . 'libraries/Oauth/StripeOAuth.class.php');
-        $this->config->load('stripe');
-        
-        // redirect to proper application OAuth url
-//    $oauth = (new StripeOAuth(
-//                'ca_5GjTCWrNPajibJQMsjoyl9BIxFmEW7Gu', 
-//                'sk_test_kEJOl8KxBN7Jyp79x8QB99kJ'
-//    ));
-//    $url = $oauth->getAuthorizeUri();
-//    header('Location: ' . ($url));
-//    exit(0);
-
-        // from the callback, after a person has linked their Stripe account with your Stripe application
-        $oauth = (new StripeOAuth(
-                'ca_5GjTCWrNPajibJQMsjoyl9BIxFmEW7Gu', 
-                'sk_live_9kTFWAsSMuk8UJ0My2xShJVL'
-        ));
-        $token = $oauth->getAccessToken($_GET['code']);
-        $key = $oauth->getPublishableKey($_GET['code']);
-        echo 'Access token: ' . ($token) . '<br />Key: ' . ($key);
-    exit(0);
     }
 
     public function connect() {
@@ -133,27 +105,6 @@ class Donation extends App_Controller {
             $url = AUTHORIZE_URI . '?' . http_build_query($authorize_request_body);
             echo "<a href='$url'>Connect with Stripe</a>";
         }
-    }
-    
-    public function connect3(){
-        $ch = curl_init("https://www.google.com/");
-
-            curl_setopt($ch, CURLOPT_CAINFO, APPPATH . 'libraries/Oauth/cacert.pem');
-        var_dump( curl_exec($ch));
-        echo 'Curl error: ' . curl_error($ch);
-    }
-    
-    public function connect4(){
-        // connect via SSL, but don't check cert
-$handle=curl_init('https://www.google.com.vn');
-curl_setopt($handle, CURLOPT_VERBOSE, true);
-curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
-$content = curl_exec($handle);
-
-echo $content; // show target page
-
-echo 'Curl error: ' . curl_error($handle);
     }
 
 }

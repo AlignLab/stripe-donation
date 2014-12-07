@@ -14,10 +14,12 @@ $(function () {
     // On form submit.
     $('#form-donation').submit(function () {
         submitDonation(1);
+        updateEmbed();
     });
     // On save as draft.
     $('#draft').on('click', function(){
         submitDonation(0);
+        updateEmbed();
     });
     
     /*
@@ -140,6 +142,9 @@ function submitDonation(publish){
             $('#save').html("Update & Publish");
             $('#donation-form-title').text("UPDATE THIS DONATION");
             $('#donation-form-description').text("Change this as you want");
+            
+            // Update the embed code:
+            updateEmbed();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             showNotification('danger', "Error on saving data!");
@@ -147,6 +152,12 @@ function submitDonation(publish){
             button.button('reset');
         }
     });
+}
+
+function updateEmbed(){
+    var baseUrl = $("#base-url").attr("href");
+    var code = '<iframe width="560" height="800" src="'+baseUrl+'pay/'+$('#donation-id').val()+'" frameborder="0" allowstransperency="true"></iframe>';
+    $('#embed').val(code);
 }
 
 function loadDonation(id) {
@@ -235,6 +246,9 @@ function loadDonation(id) {
             $('#save').html("Update & Publish");
             $('#donation-form-title').text("UPDATE THIS DONATION");
             $('#donation-form-description').text("Change this as you want");
+            
+            // Update the embed code:
+            updateEmbed();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             showAlert('danger', "Error on getting data!");
@@ -370,6 +384,9 @@ function resetDonationForm(){
         $(".amount-record:last").remove();
         amountCount--;
     }
+    
+    // Clear embed code
+    $('#embed').val("");
 }
 
 //Open a dialog to confirm delete the member.

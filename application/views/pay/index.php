@@ -1,3 +1,4 @@
+
 <div class="">
     <div class="brand-logo"></div>
     <div class="content" id="js-content">
@@ -120,5 +121,8 @@
                     </div>
                 </div>
         </form>
+        <div class="well well-sm text-small" id="credit">
+            This payment supported by Align Lab using Stripe payment.
+        </div>
     </div>
 </div>

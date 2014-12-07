@@ -7,13 +7,16 @@ Happy code!!!
     Created on : Oct 9, 2014, 11:46:20 AM
     Author     : MrHung
 */
+html{
+    background: transparent;
+}
 
 body{
-    background-color: #e5e5e5;
+    background-color: transparent;
 }
 
 #page-wrapper {
-    background-color: #e5e5e5;
+    background-color: transparent;
     width: 500px;
     margin: auto;
 }
