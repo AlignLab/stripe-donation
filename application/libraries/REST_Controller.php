@@ -402,6 +402,7 @@ abstract class REST_Controller extends CI_Controller
 			{
 				// Set the correct format header
 				header('Content-Type: '.$this->_supported_formats[$this->response->format]);
+                                
 
 				$output = $this->{'_format_'.$this->response->format}($data);
 			}
@@ -411,6 +412,7 @@ abstract class REST_Controller extends CI_Controller
 			{
 				// Set the correct format header
 				header('Content-Type: '.$this->_supported_formats[$this->response->format]);
+                               
 
 				$output = $this->format->factory($data)->{'to_'.$this->response->format}();
 			}
@@ -424,14 +426,14 @@ abstract class REST_Controller extends CI_Controller
 
 		header('HTTP/1.1: ' . $http_code);
 		header('Status: ' . $http_code);
-
 		// If zlib.output_compression is enabled it will compress the output,
 		// but it will not modify the content-length header to compensate for
 		// the reduction, causing the browser to hang waiting for more data.
 		// We'll just skip content-length in those cases.
 		if ( ! $this->_zlib_oc && ! $CFG->item('compress_output'))
 		{
-			header('Content-Length: ' . strlen($output));
+//			header('Content-Length: ' . strlen($output));
+                    header('Content-Length: ' . strlen("'".$output."'"));
 		}
 
 		exit($output);

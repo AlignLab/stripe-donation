@@ -93,14 +93,14 @@
 
             <div class="form-group">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-xs-4">
                         <label>
                             <span>CVC</span>
                         </label>
                         <input type="text" size="4" data-stripe="cvc" class="form-control input-sm"/>
                     </div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-6">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-6">
                         <label>
                             <span>Expiration (MM/YYYY)</span>
                         </label>
@@ -116,7 +116,7 @@
                 </div>
             </div>
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
+                    <div class="col-xs-6 col-xs-offset-3">
                         <button type="submit" class="btn btn-primary btn-block">Submit Payment</button>
                     </div>
                 </div>

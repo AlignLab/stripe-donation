@@ -57,6 +57,7 @@ class Order_Model extends CI_Model{
     }
     function getDonorNumber($userId){
         $this->db->select('client_email', false);
+        $this->db->where('user_id', $userId);
         $this->db->distinct();
         $clientEmail = $this->db->get('orders')->result_array();
         return count($clientEmail);
