@@ -11,16 +11,15 @@ class Order extends REST_Controller {
         $this->load->model('order_model');
     }
 
-    function get() {
+    function index_get($id = "") {
 
-        $query = $this->_get('q');
-        $userId = $this->_get('user_id');
+        $query = $this->get('q');
+        $userId = $this->get('user_id');
         
         if ($query == 'summary'){
             // Get the summary of the order
             $response = $this->order_model->getSummary($userId);
         } else {
-            $id = $this->_get('id');
             if ($userId){
                 $response = $this->order_model->getOrder($userId, $id);
             } else {
@@ -38,7 +37,7 @@ class Order extends REST_Controller {
     
     // TODO : Add user_id authenticate. NOT APPLIED YET.
 
-    function post() {
+    function index_post() {
         $data = $this->_post_args;
         
         $id = $this->order_model->createOrder($data);
@@ -51,8 +50,7 @@ class Order extends REST_Controller {
         }
     }
 
-    public function put() {
-        $id = $this->_get('id');
+    public function index_put($id = "") {
         if (!$id) {
             $this->response(array('error' => '400 - An "id" must be provided by GET parameter to put.'), 400);
         } else {
@@ -66,8 +64,7 @@ class Order extends REST_Controller {
         }
     }
 
-    function delete() {
-        $id = $this->_get('id');
+    function index_delete($id= "") {
         if (!$id) {
             $this->response(array('error' => '400 - An "id" must be provided by GET parameter to delete.'), 400);
         } else {

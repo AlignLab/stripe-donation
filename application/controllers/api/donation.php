@@ -11,10 +11,8 @@ class Donation extends REST_Controller {
         $this->load->model('donation_model');
     }
 
-    function get() {
-
-        $id = $this->_get('id');
-        $userId = $this->_get('user_id');
+    public function index_get($id = "") {
+        $userId = $this->get('user_id');
         
         if ($userId){
             $response = $this->donation_model->getDonation($userId, $id);
@@ -33,7 +31,7 @@ class Donation extends REST_Controller {
     
     // TODO : Add user_id authenticate. NOT APPLIED YET.
 
-    function post() {
+    public function index_post() {
         $data = $this->_post_args;
         
         $id = $this->donation_model->createDonation($data);
@@ -46,8 +44,7 @@ class Donation extends REST_Controller {
         }
     }
 
-    public function put() {
-        $id = $this->_get('id');
+    public function index_put($id = "") {
         if (!$id) {
             $this->response(array('error' => '400 - An "id" must be provided by GET parameter to put.'), 400);
         } else {
@@ -61,8 +58,7 @@ class Donation extends REST_Controller {
         }
     }
 
-    function delete() {
-        $id = $this->_get('id');
+    function index_delete($id="") {
         if (!$id) {
             $this->response(array('error' => '400 - An "id" must be provided by GET parameter to delete.'), 400);
         } else {

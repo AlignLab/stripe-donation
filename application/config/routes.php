@@ -50,5 +50,11 @@ $route['my-account'] = 'user/account';
 /* Routing for Stripe Donation website */
 $route['pay/(:num)'] = 'pay/index/$1';
 
+//Because we move from an older version of REST_Controller, route is still like: resource/id/123.
+//Just use this to fit with existed api.
+// New REST_Controller would be: resource/method/{parametter}
+$route['api/donation/id/(:any)'] = 'api/donation/index/$1';
+$route['api/order/id/(:any)'] = 'api/order/index/$1';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

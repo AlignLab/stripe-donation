@@ -26,12 +26,36 @@ $config['rest_default_format'] = 'json';
 
 /*
 |--------------------------------------------------------------------------
+| REST Status field name
+|--------------------------------------------------------------------------
+|
+| The field name for the status of the response
+|
+|	'status'
+|
+*/
+$config['rest_status_field_name'] = 'status';
+
+/*
+|--------------------------------------------------------------------------
+| REST message field name
+|--------------------------------------------------------------------------
+|
+| The field name for the message inside the response
+|
+|	'error'
+|
+*/
+$config['rest_message_field_name'] = 'error';
+
+/*
+|--------------------------------------------------------------------------
 | Enable emulate request
 |--------------------------------------------------------------------------
 |
 | Should we enable emulation of the request (e.g. used in Mootools request)?
 |
-|	Default: false
+|	Default: TRUE
 |
 */
 $config['enable_emulate_request'] = TRUE;
@@ -73,6 +97,8 @@ $config['rest_auth'] = false;
 |	If 'rest_auth' is 'session' then set 'auth_source' to the name of the session variable to check for.
 |
 */
+
+//change this to '' for wildcard unit test
 $config['auth_source'] = 'ldap';
 
 /*
@@ -84,6 +110,9 @@ $config['auth_source'] = 'ldap';
 |
 | The function should accept two parameters: class->function($username, $password)
 | In other cases override the function _perform_library_auth in your controller
+|
+| For digest authentication the library function should return already stored md5(username:restrealm:password) for that username
+|	E.g: md5('admin:REST API:1234') = '1e957ebc35631ab22d5bd6526bd14ea2'
 |
 */
 $config['auth_library_class'] = '';
@@ -103,15 +132,20 @@ $config['auth_library_function'] = '';
 |			$config['auth_override_class_method']['deals']['view'] = 'none';
 |			$config['auth_override_class_method']['deals']['insert'] = 'digest';
 |			$config['auth_override_class_method']['accounts']['user'] = 'basic';
+|			$config['auth_override_class_method']['dashboard']['*'] = 'none|digest|basic';
 |
-| Here 'deals' and 'accounts' are controller names, 'view', 'insert' and 'user' are methods within. (NOTE: leave off the '_get' or '_post' from the end of the method name)
+| Here 'deals', 'accounts' and 'dashboard' are controller names, 'view', 'insert' and 'user' are methods within. An asterisk may also be used to specify an authentication method for an entire classes methods. Ex: $config['auth_override_class_method']['dashboard']['*'] = 'basic'; (NOTE: leave off the '_get' or '_post' from the end of the method name)
 | Acceptable values are; 'none', 'digest' and 'basic'.
 |
 */
 // $config['auth_override_class_method']['deals']['view'] = 'none';
 // $config['auth_override_class_method']['deals']['insert'] = 'digest';
 // $config['auth_override_class_method']['accounts']['user'] = 'basic';
+// $config['auth_override_class_method']['dashboard']['*'] = 'basic';
 
+
+//---Uncomment list line for the wildard unit test
+//$config['auth_override_class_method']['wildcard_test_cases']['*'] = 'basic';
 /*
 |--------------------------------------------------------------------------
 | REST Login usernames
@@ -361,7 +395,7 @@ $config['rest_logs_json_params'] = FALSE;
 |
 | The table name in your database that stores limits.
 |
-|	'logs'
+|	'limits'
 |
 */
 $config['rest_limits_table'] = 'limits';
@@ -386,6 +420,12 @@ $config['rest_limits_table'] = 'limits';
 	  PRIMARY KEY (`id`)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 |
+| To specify limits, within your Controller __construct() method add per-method 
+| limits with:
+
+ $this->method['METHOD_NAME']['limit'] = [NUM_REQUESTS_PER_HOUR];
+ 
+| See application/controllers/api/example.php for examples. 
 */
 $config['rest_enable_limits'] = FALSE;
 
