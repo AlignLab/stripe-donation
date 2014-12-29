@@ -55,3 +55,8 @@ input:-moz-placeholder, textarea:-moz-placeholder {
 .img-center{
     margin: auto;
 }
+
+/*Hide the logout link*/
+#logout{
+    display: none;
+}

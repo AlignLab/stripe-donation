@@ -42,7 +42,7 @@ class Donation extends App_Controller {
             $data['announce_action_text'] = "Create a Donation";
         } else {
             $data['announce_message'] = "Welcome to Donations, get started by: ";
-            $data['announce_action'] = "https://connect.stripe.com/oauth/authorize?response_type=code&scope=read_write&client_id=".$clientId."&state=" . $userId;
+            $data['announce_action'] = "https://connect.stripe.com/oauth/authorize?response_type=code&scope=read_write&client_id=".$clientId."&state=" . $userId."&redirect_uri=http://localhost/stripe-donation/donation/connect";
             $data['announce_action_text'] = "Activate your Stripe account";
         }
 
@@ -83,6 +83,11 @@ class Donation extends App_Controller {
             $respCode = curl_getinfo($req, CURLINFO_HTTP_CODE);
             $resp = json_decode(curl_exec($req), true);
             curl_close($req);
+            echo "TESt";
+            if(curl_errno($c))
+            {
+                echo 'error:' . curl_error($c);
+            }
             
             // Get the user ID
             $userId = $this->input->get('state');
@@ -106,5 +111,7 @@ class Donation extends App_Controller {
             echo "<a href='$url'>Connect with Stripe</a>";
         }
     }
+    
+    
 
 }

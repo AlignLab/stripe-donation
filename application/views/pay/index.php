@@ -1,8 +1,12 @@
-
 <div class="">
     <div class="brand-logo"></div>
     <div class="content" id="js-content">
-        <h1>Charge $10 with Stripe</h1>
+        <h1><?php echo $donation['title'] ?></h1>
+        <p><?php 
+            if ($donation['has_description']):
+                echo $donation['description'];
+            endif;        
+                    ?></p>
         <!--        <form action="" method="POST" id="payment-form">-->
         <form method="POST" id="payment-form" onsubmit="return false;">
 

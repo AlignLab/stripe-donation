@@ -432,8 +432,8 @@ abstract class REST_Controller extends CI_Controller
 		// We'll just skip content-length in those cases.
 		if ( ! $this->_zlib_oc && ! $CFG->item('compress_output'))
 		{
-//			header('Content-Length: ' . strlen($output));
-                    header('Content-Length: ' . strlen("'".$output."'"));
+			header('Content-Length: ' . strlen($output));
+//                    header('Content-Length: ' . strlen("'".$output."'"));
 		}
 
 		exit($output);
