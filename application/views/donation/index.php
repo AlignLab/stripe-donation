@@ -113,7 +113,7 @@
                 </div>
 
                 <!-- Text area -->
-                <div class="form-group">
+                <div class="form-group" id="description-area" style="display: none;">
                     <label class=" control-label" for="description">Type a Description</label>
                     <div class="">                     
                         <textarea class="form-control" id="description" name="description"></textarea>
@@ -140,7 +140,7 @@
                 </div>
 
                 <!-- Amounts and Description fields-->
-                <div class="form-group" id="amounts-fields">
+                <div class="form-group" id="amounts-fields" style="display: none;">
                     <div class="row">
                         <div class="col-sm-4">
                             <label class="control-label" for="amount">Amounts</label>
@@ -155,7 +155,7 @@
                             <div class="">
                                 <div class="input-group">
                                     <span class="input-group-addon">$</span>
-                                    <input id="amount" name="amount[]" class="form-control" placeholder="" type="number" required="">
+                                    <input id="amount" name="amount[]" class="form-control" placeholder="" type="number">
                                 </div>
                             </div>
                         </div>
@@ -177,15 +177,15 @@
                     <label class="control-label" for="frequency">Frequency of Payment</label>
                     <div class="">
                         <div class="radio">
-                            <label for="frequency-2">
-                                <input type="radio" name="frequency" id="frequency-2" value="0">
-                                Decided at checkout
-                            </label>
-                        </div>
-                        <div class="radio">
                             <label for="frequency-0">
                                 <input type="radio" name="frequency" id="frequency-0" value="1" checked="checked">
                                 One time
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="frequency-2">
+                                <input type="radio" name="frequency" id="frequency-2" value="0">
+                                Decided at checkout
                             </label>
                         </div>
                         <div class="radio">
@@ -198,7 +198,7 @@
                 </div>
 
                 <!-- Select Basic -->
-                <div class="form-group">
+                <div class="form-group" id="frequency-area" style="display: none;">
                     <label class="control-label" for="frequency">Recurring Period</label>
                     <div class="">
                         <select id="frequency" name="frequency" class="form-control">
@@ -212,11 +212,18 @@
                     </div>
                 </div>
 
-                <!-- Textarea -->
+                <!-- Confirmation -->
                 <div class="form-group">
-                    <label class="control-label" for="confirmation">After the donor checked out, show confirmation message</label>
+                    <label class="control-label" for="confirmation">After the donor checked out, <br>Show confirmation message</label>
                     <div class="">                     
                         <textarea class="form-control" id="confirmation" name="confirmation"></textarea>
+                    </div>
+                </div>
+                <!-- Textarea -->
+                <div class="form-group">
+                    <label class="control-label" for="confirmation-email">And Email confirmation message</label>
+                    <div class="">                     
+                        <textarea class="form-control" id="confirmation-email" name="confirmation-email"></textarea>
                     </div>
                 </div>
                 
@@ -225,6 +232,12 @@
                     <label class="control-label" for="embedded">Embedded Code for your website</label>
                     <div class="">                     
                         <input id="embed" type="text" class="form-control input-md" readonly="readonly">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="pay-link">Payment link</label>
+                    <div class="">                     
+                        <input id="pay-link" type="text" class="form-control input-md" readonly="readonly">
                     </div>
                 </div>
 
@@ -254,6 +267,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Order #</th>
+                    <th>Donated to</th>
                     <th>Email</th>
                     <th>Recurring</th>
                     <th>Total amount</th>

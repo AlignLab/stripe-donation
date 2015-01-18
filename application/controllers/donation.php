@@ -42,7 +42,7 @@ class Donation extends App_Controller {
             $data['announce_action_text'] = "Create a Donation";
         } else {
             $data['announce_message'] = "Welcome to Donations, get started by: ";
-            $data['announce_action'] = "https://connect.stripe.com/oauth/authorize?response_type=code&scope=read_write&client_id=".$clientId."&state=" . $userId."&redirect_uri=http://localhost/stripe-donation/donation/connect";
+            $data['announce_action'] = "https://connect.stripe.com/oauth/authorize?response_type=code&scope=read_write&client_id=" . $clientId . "&state=" . $userId . "&redirect_uri=" . base_url() . "donation/connect";
             $data['announce_action_text'] = "Activate your Stripe account";
         }
 
@@ -72,7 +72,7 @@ class Donation extends App_Controller {
             curl_setopt($req, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($req, CURLOPT_POST, true);
             curl_setopt($req, CURLOPT_POSTFIELDS, http_build_query($token_request_body));
-            
+
             // This disable SSL stuff to connect to https site. :D
             // But it just bypass verification.
             // TODO: Check better way in: http://curl.haxx.se/mail/curlphp-2005-11/0038.html
@@ -84,18 +84,17 @@ class Donation extends App_Controller {
             $resp = json_decode(curl_exec($req), true);
             curl_close($req);
             echo "TESt";
-            if(curl_errno($c))
-            {
+            if (curl_errno($c)) {
                 echo 'error:' . curl_error($c);
             }
-            
+
             // Get the user ID
             $userId = $this->input->get('state');
-            
-            if ( ! $this->connect_model->checkConnect($userId)){
+
+            if (!$this->connect_model->checkConnect($userId)) {
                 $this->connect_model->saveConnect($userId, $resp);
             }
-            
+
             // Redirect to index.
             redirect('donation');
         } else if (isset($_GET['error'])) { // Error
@@ -111,7 +110,5 @@ class Donation extends App_Controller {
             echo "<a href='$url'>Connect with Stripe</a>";
         }
     }
-    
-    
 
 }

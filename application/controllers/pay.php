@@ -9,6 +9,8 @@ class Pay extends App_Controller {
         $this->load->model('connect_model');
         $this->load->model('donation_model');
         $this->load->model('order_model');
+        $this->load->model('user_model');
+        $this->load->model('email_model');
         $this->config->load('stripe');
     }
 
@@ -109,6 +111,7 @@ class Pay extends App_Controller {
 
                         $orderData = array(
                             'user_id' => $userId,
+                            'donation_id' => $donation['id'],
                             'client_name' => $name,
                             'client_email' => $email,
                             'frequency' => $frequency,
@@ -119,6 +122,11 @@ class Pay extends App_Controller {
                         if ($orderId) {
                             // Save order successful
                             $data['confirmation'] = $donation['confirmation_message'];
+                            
+                            // Sending email here:
+                            // Need to check the return of sending mail: success or not. :)
+                            $this->sendmail($orderId);
+                            
                             $this->render_embed_page('pay/thankyou', $data);
                         } else {
                             // Error on saving order
@@ -195,5 +203,44 @@ class Pay extends App_Controller {
             }
         }
     }
-
+    
+    public function sendWaitMail() {
+        $this->load->library('simple_mail');
+        $emailTo = "imrhung@yahoo.com";
+        $subject = 'Welcome to Hero for Zero Program';
+        $message = 'Thank you for your time registering "for Hero for Zero" program. We will need some time to process your '
+                . 'information before appoving your application. We will send you an email when your approval process complete.'
+                . ' Best regards, "Hero for Zero" team.';
+        
+        // Send mail:
+        return $this->simple_mail->sendMail($emailTo, $subject, $message);
+    }
+    
+    private function sendmail($orderId){
+        
+        $order = $this->order_model->getOrder(null, $orderId);
+        $userId = $order['user_id'];
+        $donationId = $order['donation_id'];
+        // Get donation info from data base:
+        $donation = $this->donation_model->getDonation(null, $donationId);
+        // Get user to get the Name of the user for Display Name in email
+        //$user = $this->user_model->getUser($userId);
+        // FIXME : fixed display name.
+        $displayName = "Donation";
+        $recipient = $order['client_email'];
+        $subject = "Donation Payment Receipt";
+        $message = "This email confirm that ".$displayName." has successfully charged your card for $".$order['amount'].".00";
+        $message .= "\r\n\r\n";
+        $message .= $donation['confirmation_email'];
+        $message .= "\r\n\r\n";
+        $message .= "Donation Details:";
+        $message .= "\r\n";
+        $message .= "Charge Date: ".date("M j Y g:i A", strtotime($order['created_date']))."\r\n";
+        $message .= "Bill To: ".$order['client_name']."\r\n";
+        $message .= "Amount: $".$order['amount'].".00 USD \r\n";
+        //$message .= "Last 4 Card Digits: ";
+        
+        // Send the mail:
+        return $this->email_model->sendConfirmMail($displayName, $recipient, $subject, $message);
+    }
 }

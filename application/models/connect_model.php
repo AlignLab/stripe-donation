@@ -1,5 +1,5 @@
 
-<?php
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Connect_Model extends CI_Model{
     

@@ -50,6 +50,34 @@ $(function () {
         resetDonationForm();
     });
     
+    // Has decription radio button handle.
+    $("input[name='radio-description']").on('change', function(){
+        if ($(this).val() == 0){
+            $("#description-area").css("display", "none");
+        } else {
+            $("#description-area").css("display", "block");
+        }
+    });
+    // Has amount radio button handle.
+    $("input[name='radio-amount']").on('change', function(){
+        if ($(this).val() == 0){
+            $("#amounts-fields").css("display", "none");
+            $(".amount-record").find("input[name='amount[]']").removeAttr('required');
+        } else {
+            $("#amounts-fields").css("display", "block");
+            $(".amount-record").find("input[name='amount[]']").attr('required', true);
+        }
+    });
+    // Recurring selection
+    $("input[name='frequency']").on('change', function(){
+        // Recurring
+        if ($(this).val() == 2){
+            $("#frequency-area").css("display", "block");
+        } else {
+            $("#frequency-area").css("display", "none");
+        }
+    });
+    
     loadStatTable();
     loadDonationTable();
     loadOrderTable();
@@ -76,6 +104,7 @@ function submitDonation(publish){
     }
     
     var confirmation = $('#confirmation').val();
+    var confirmationEmail = $('#confirmation-email').val();
     
     // Get amount data
     var amounts = [];
@@ -122,6 +151,7 @@ function submitDonation(publish){
             amount_decide: decideAmount,
             frequency: frequency,
             confirmation_message: confirmation,
+            confirmation_email: confirmationEmail,
             public_state: publish,
             amounts: amountsJSON
         },
@@ -155,9 +185,16 @@ function submitDonation(publish){
 }
 
 function updateEmbed(){
+    
     var baseUrl = $("#base-url").attr("href");
+    
+    // Update the embed part
     var code = '<iframe width="560" height="800" src="'+baseUrl+'pay/'+$('#donation-id').val()+'" frameborder="0" allowstransperency="true"></iframe>';
     $('#embed').val(code);
+    
+    // Update the link
+    var link = baseUrl + 'pay/' + $('#donation-id').val();
+    $('#pay-link').val(link);
 }
 
 function loadDonation(id) {
@@ -185,12 +222,16 @@ function loadDonation(id) {
                     break;
                 case 1:
                     radioDes.filter('[value=1]').prop('checked', true);
+                    
+                    // Description area:
+                    $("#description-area").css("display", "block");
+                    $('#description').val(data.description);
                     break;
                 default:
                     radioDes.filter('[value=0]').prop('checked', true);
             }
             
-            $('#description').val(data.description);
+            
             
             // Set the Amount decide state:
             var radioAmount = $('input:radio[name=radio-amount]');
@@ -200,31 +241,38 @@ function loadDonation(id) {
                     break;
                 case 1:
                     radioAmount.filter('[value=1]').prop('checked', true);
+                    
+                    // Amount area:
+                    $("#amounts-fields").css("display", "block");
+                    $(".amount-record").find("input[name='amount[]']").attr('required', true);
+                    // Set the amounts
+                    for (var i=0; i< data.amounts.length; i++){
+                        if (i === 0){
+                            // First amount
+                            $('.amount-record:first').find('input[name^=amount]').val(data.amounts[0].amount);
+                            $('.amount-record:first').find('input:text[name^=description-amount]').val(data.amounts[0].description);
+                        } else {
+                            // Add more amount
+                            $(".amount-record:last").clone()
+                                  .find("input").val("").end()
+                                  .insertAfter('.amount-record:last');
+                            amountCount++;
+                            $('.amount-record:last').find('input[name^=amount]').val(data.amounts[i].amount);
+                            $('.amount-record:last').find('input:text[name^=description-amount]').val(data.amounts[i].description);
+                        }
+                    }
                     break;
                 default:
                     radioAmount.filter('[value=0]').prop('checked', true);
             }
-            // Set the amounts
-            for (var i=0; i< data.amounts.length; i++){
-                if (i === 0){
-                    // First amount
-                    $('.amount-record:first').find('input[name^=amount]').val(data.amounts[0].amount);
-                    $('.amount-record:first').find('input:text[name^=description-amount]').val(data.amounts[0].description);
-                } else {
-                    // Add more amount
-                    $(".amount-record:last").clone()
-                          .find("input").val("").end()
-                          .insertAfter('.amount-record:last');
-                    amountCount++;
-                    $('.amount-record:last').find('input[name^=amount]').val(data.amounts[i].amount);
-                    $('.amount-record:last').find('input:text[name^=description-amount]').val(data.amounts[i].description);
-                }
-            }
+            
             
             // Set the Frequency of payment
             var radioFrequency = $('input:radio[name=frequency]');
             var frequency = parseInt(data.frequency);
             if (frequency > 2){
+                // Recurring area:
+                $("#frequency-area").css("display", "block");
                 // Recurring payment:
                 radioFrequency.filter('[value=2]').prop('checked', true);
                 $('#frequency').val(frequency);
@@ -236,11 +284,12 @@ function loadDonation(id) {
                     radioFrequency.filter('[value=0]').prop('checked', true);
                 }
                 // Disable Recurring period.
-                $('#frequency').attr('disabled', 'disabled');
+                // $('#frequency').attr('disabled', 'disabled');
             }
             
             // Set the confirmation message
             $('#confirmation').val(data.confirmation_message);
+            $('#confirmation-email').val(data.confirmation_email);
 
             // Change the view to edit mode
             $('#save').html("Update & Publish");
@@ -310,6 +359,7 @@ function loadOrderTable(){
                 var row = $('<tr></tr>');
                 var name = $('<td></td>').text(data[i].client_name);
                 var order = $('<td></td>').text(data[i].id);
+                var donate = $('<td></td>').text(data[i].title);
                 var email = $('<td></td>').text(data[i].client_email);
                 
                 var recurring;
@@ -340,7 +390,7 @@ function loadOrderTable(){
                 
                 var amount = $('<td></td>').text(data[i].amount);
                 
-                row.append(name).append(order).append(email).append(recurring).append(amount);
+                row.append(name).append(order).append(donate).append(email).append(recurring).append(amount);
                 orderTable.append(row);
             }
         },

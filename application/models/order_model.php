@@ -1,4 +1,4 @@
-<?php
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Order_Model extends CI_Model{
     
@@ -11,17 +11,27 @@ class Order_Model extends CI_Model{
             // TODO : check userID here. NOT CHECKED YET.
             $idList = explode(',', $id);
             if (count($idList) > 1 ){
-                $this->db->where_in('id',$idList);
-                $query = $this->db->get('orders');
+                $this->db->select('orders.*, donations.title', FALSE);
+                $this->db->where_in('orders.id',$idList);
+                $this->db->from('orders');
+                $this->db->join('donations', 'donations.id=orders.donation_id');
+                $query = $this->db->get();
                 $result = $query->result_array();
             } else {
-                $query = $this->db->get_where('orders', array('id'=>$id));
+                $this->db->select('orders.*, donations.title', FALSE);
+                $this->db->where('orders.id',$id);
+                $this->db->from('orders');
+                $this->db->join('donations', 'donations.id=orders.donation_id');
+                $query = $this->db->get();
                 $result = $query->row_array();
             }
             return $result;
         } else {
-            $this->db->where('user_id', $userId);
-            $query = $this->db->get('orders');
+            $this->db->select('orders.*, donations.title', FALSE);
+            $this->db->where('orders.user_id', $userId);
+            $this->db->from('orders');
+            $this->db->join('donations', 'donations.id=orders.donation_id');
+            $query = $this->db->get();
             $result = $query->result_array();
             return $result;
         }
