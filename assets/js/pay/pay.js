@@ -38,40 +38,8 @@ jQuery(function ($) {
         // Prevent the form from submitting with the default action
         return false;
     });
-});
-
-
-
-$(function () {
-    var teamId = 123,
-            tokenStr = "token", passcodeStr = "passcode", passcode = "2014";
-    function md5(signature) {
-        return CryptoJS.MD5(signature).toString()
-    }
-    function signature(token, passcode) {
-        return passcodeStr + "=" + encodeURIComponent(passcode) + "&" + tokenStr + "=" + encodeURIComponent(token)
-    }
-    $(".btn-light").click(function (e) {
-        e.preventDefault();
-        if ($(this).parents("li").hasClass("on")) {
-            $(this).parents("li").removeClass("on").addClass("off");
-            return
-        }
-        var light = parseInt(this.id.replace("light", "")), self = this;
-        if (light == 3)
-            return;
-        var params = {callback: window.location.origin + "/callback"};
-        $.post("/v1/api/lights/" + light + "/token", params, function (resp) {
-            var token = resp.token, params = {
-                token: token, passcode: passcode, signature: md5(signature(token, passcode))
-            };
-            $.post("/v1/api/lights/" + light + "/on", params, function (resp) {
-                $(self).parents("li").removeClass("off").addClass("on")
-            }).fail(function (xhr) {
-                alert(xhr.responseJSON.errors)
-            })
-        }).fail(function (xhr) {
-            alert(xhr.responseJSON.errors)
-        })
-    })
+    
+    $('#credit').on('click', function(){
+        $('#expand-credit').toggleClass('hide');
+    });
 });

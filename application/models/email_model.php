@@ -20,9 +20,9 @@ class Email_Model extends CI_Model {
         $nameDisplay = $displayName;
         
         $config['protocol'] = 'smtp';       // Using protocol SMTP for send mail
-        $config['smtp_host'] = 'smtp.gmail.com';
-        $config['smtp_crypto'] = 'tls';     // Choose way for send mail
-        $config['smtp_port'] = '25';
+        $config['smtp_host'] = 'ssl://smtp.zoho.com';
+        //$config['smtp_crypto'] = 'tls';     // Choose way for send mail
+        $config['smtp_port'] = '465';
         $config['smtp_timeout'] = '7';
         $config['smtp_user'] = $this->config->item("email_user");  // name's user using send mail with SMTP
         $config['smtp_pass'] = $this->config->item("email_pass");  // Password of user

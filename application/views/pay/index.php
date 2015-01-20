@@ -2,18 +2,18 @@
     <div class="brand-logo"></div>
     <div class="content" id="js-content">
         <h1><?php echo $donation['title'] ?></h1>
-        <p><?php 
+        <p><?php
             if ($donation['has_description']):
                 echo $donation['description'];
-            endif;        
-                    ?></p>
+            endif;
+            ?></p>
         <!--        <form action="" method="POST" id="payment-form">-->
         <form method="POST" id="payment-form" onsubmit="return false;">
 
             <input id="publish-key" type="hidden" value="<?php echo $publish_key ?>">
 
             <span class="payment-errors"></span>
-            
+
             <!--Name-->
             <div class="form-group">
                 <label for="name">Your name</label>
@@ -29,7 +29,7 @@
             <!--Frequency-->
             <?php if ($donation['frequency'] == 1) : ?>
                 <!--One time payment. Show nothing-->
-                
+
             <?php elseif ($donation['frequency'] == 0) : ?>
                 <!--Client choose the frequency-->
                 <div class="form-group">
@@ -43,7 +43,7 @@
                         <option value="12">Yearly</option>
                     </select>
                 </div>
-                
+
             <?php else : ?>
                 <!--Frequency is set. Just show to user.-->
                 <div class="form-group">
@@ -58,13 +58,13 @@
                     </select>
                 </div>
                 <script>
-                    $('#frequency').val(<?php echo $donation['frequency'];?>)
+                    $('#frequency').val(<?php echo $donation['frequency']; ?>)
                             .prop('disabled', 'disabled');
                 </script>
             <?php endif; ?>
-            
+
             <!--Amount-->
-            <?php if ($donation['amount_decide'] == 0) :?>
+            <?php if ($donation['amount_decide'] == 0) : ?>
                 <!--User decide the amount-->
                 <div class="form-group">
                     <label for="amount">Amount</label>
@@ -80,13 +80,13 @@
                     <select id="amount" name="amount" class="form-control">
                         <?php
                         foreach ($donation['amounts'] as $amount) {
-                            echo '<option value="'.$amount['amount'].'">$'.$amount['amount'].' - '.$amount['description'].'</option>';
+                            echo '<option value="' . $amount['amount'] . '">$' . $amount['amount'] . ' - ' . $amount['description'] . '</option>';
                         }
                         ?>
                     </select>
                 </div>
             <?php endif; ?>
-            
+
             <div class="form-group">
                 <label>
                     <span>Card Number</span>
@@ -119,14 +119,22 @@
                     </div>
                 </div>
             </div>
-                <div class="row">
-                    <div class="col-xs-6 col-xs-offset-3">
-                        <button type="submit" class="btn btn-primary btn-block">Submit Payment</button>
-                    </div>
+            <div class="row">
+                <div class="col-xs-6 col-xs-offset-3">
+                    <button type="submit" class="btn btn-primary btn-block">Submit Payment</button>
                 </div>
+            </div>
         </form>
         <div class="well well-sm text-small" id="credit">
-            This payment supported by Align Lab using Stripe payment.
+            <span class="fa fa-lock">  </span> This payment supported by Align Lab using Stripe payment.
+            <div class="help-tooltip hide" id="expand-credit">
+                <hr>
+                <p>This page is hosted by Align Lab. We using <a href="http://stripe.com/">Stripe</a> to safely process card transaction.</p>
+                <p>Your connection is encrypted with 128-bit encryption. The connection uses TLS 1.2. The connection is encrypted and authenticated using AES_128_GCM and uses ECDHE_RSA as the key exchange mechanism.</p>
+                <p>The identity of this website has been verified.</p>
+                <p>Align Lab and Stripe provide full SSL encryption and all PCI compliance. All card numbers are fully encrypted on disk with AES-256.</p>
+                <p>PCI compliance is certified to PCI Service Provider Level 1, the most stringent level of certification available. All browsers interact with AlignLab and Stripe over HTTPS.</p>
+            </div>
         </div>
     </div>
 </div>

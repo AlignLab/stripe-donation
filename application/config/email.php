@@ -6,5 +6,5 @@
  * Happy code!!!
  */
 
-$config['email_user'] = 'heroforzero.vn@gmail.com';
-$config['email_pass'] = 'oceanfour';
+$config['email_user'] = 'donate@alignlab.com';
+$config['email_pass'] = 'donate400187';
